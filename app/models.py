@@ -1,6 +1,17 @@
 from . import db
 from datetime import datetime
 
+class Coordinate(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    latitude = db.Column(db.Float, unique=True)
+    longitutde = db.Column(db.Float, unique=True)
+    notes = db.Column(db.String(500), unique=True)
+
+    def __init__(self, latitude, longitude, notes):
+        self.latitude = latitude
+        self.longitue = longitude
+        self.notes = notes
+
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
