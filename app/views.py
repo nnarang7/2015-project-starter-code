@@ -1,22 +1,28 @@
 from app import app, db, models
-from flask import request
+from flask import request, render_template
 import json
 
 
 @app.route('/', methods=['GET'])
 def index():
-    return 'Hello world!'
+    return render_template('index.html', coordinate_set = models.Coordinate.query.all())
 
 @app.route('/health', methods=['GET'])
 def health():
-    return "App is healthy!", 200
+    print models.Coordinate.query.all()
+    return "App is healthy", 200
 
 @app.route('/coordinates', methods=['POST'])
 def coordinates():
-    r = request.data
-    r_json1 = json.dumps(r)
-    r_json2 = json.loads(r_json1)
-    for key, value in r_json2:
-	print key
-	print value
+    r = request.json
+    r_coordinates = r['coordinates']
+    for item in r_coordinates:
+        print item['latitude']
+        print item['longitude']
+        print item['notes']
+        map_info = models.Coordinate(item['latitude'], item['longitude'], item['notes'])
+        db.session.add(map_info)
+        db.session.commit()
+    
+    
     return "testing"

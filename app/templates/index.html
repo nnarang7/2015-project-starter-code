@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<title>Hack4Impact Map!</title>
+<head>
+  <meta charset="utf-8">
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+  <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <script type="text/javascript" src="static/js/gmaps.js"></script>
+  <script type="text/javascript">
+    var map;
+    $(document).ready(function(){
+      map = new GMaps({
+        el: '#show_map',
+        lat: -12.043333,
+        lng: -77.028333,
+        zoomControl : true,
+        zoomControlOpt: {
+            style : 'SMALL',
+            position: 'TOP_LEFT'
+        },
+        panControl : false,
+        streetViewControl : false,
+        mapTypeControl: false,
+        overviewMapControl: false
+      });
+      var bounds = [];
+      {% for item in coordinate_set %}
+        var latlng = new google.maps.LatLng({{item['latitude']}}, {{item['longitude']}});
+        bounds.push(latlng);
+      	map.addMarker({
+      		lat: {{item['latitude']}}, 
+      		lng: {{item['longitude']}}});
+      {% endfor %}
+      map.fitLatLngBounds(bounds);
+    });
+  </script>
+</head>
+<body>
+      <div id="show_map" style="height:250px;"></div>
+	<p>{% for item in coordinate_set %}
+		<div class="coordinate_class">
+			<p> latitude:  {{item['latitude']}}</p>
+			<p> longitude: {{item['longitude']}}</p>
+			<p> notes:  {{item['notes']}}</p>
+		</div>
+	{% endfor %}
+
+</body>
